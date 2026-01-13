@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Player } from '../types';
+import { Player, PlayerStats } from '../types';
 
 interface PlayerProfileProps {
   player: Player;
@@ -9,7 +9,8 @@ interface PlayerProfileProps {
 
 const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, onClose }) => {
   // Helper to aggregate stats across all phases (OFFSEASON, PRESEASON, REGULAR_SEASON, PLAYOFFS)
-  const aggregateStats = Object.values(player.stats).reduce((acc, curr) => ({
+  // Fix: Explicitly type 'curr' as PlayerStats and the accumulator to resolve 'unknown' property access errors
+  const aggregateStats = Object.values(player.stats).reduce((acc, curr: PlayerStats) => ({
     passingYards: acc.passingYards + curr.passingYards,
     passingTds: acc.passingTds + curr.passingTds,
     rushingYards: acc.rushingYards + curr.rushingYards,
