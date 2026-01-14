@@ -1,5 +1,5 @@
 
-import { Position, EnrollmentSize, OtherSport } from './types';
+import { Position, EnrollmentSize, OtherSport } from './types.ts';
 
 export const POSITIONS: Position[] = ['QB', 'RB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT', 'DE', 'DT', 'LB', 'CB', 'S', 'K', 'P'];
 
@@ -43,7 +43,7 @@ export const TRAITS = [
 
 export const PHASE_CONFIG = {
   OFFSEASON: { weeks: 3, label: 'Off-Season', months: ['December', 'January', 'February', 'March'] },
-  PRESEASON: { weeks: 6, label: 'Pre-Season', months: ['June', 'July', 'August'], scrimmages: [5, 6] },
+  PRESEASON: { weeks: 6, label: 'Pre-Season', months: ['June', 'July', 'August'], scrimmages: [1, 2] },
   REGULAR_SEASON: { weeks: 9, label: 'Regular Season', months: ['September', 'October', 'November'] },
   PLAYOFFS: { weeks: 4, label: 'Post-Season', months: ['November', 'December'] }
 };

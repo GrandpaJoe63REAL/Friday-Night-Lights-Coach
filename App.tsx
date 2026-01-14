@@ -145,7 +145,6 @@ const App: React.FC = () => {
 
   const getCurrentMatch = () => {
     if (!gameState) return null;
-    // FIX: Match scrimmage weeks 1 and 2 in PRESEASON
     if (gameState.phase === 'PRESEASON') {
       if (gameState.week === 1) return gameState.schedule.find(m => m.id === 'scrimmage-1' && !m.played);
       if (gameState.week === 2) return gameState.schedule.find(m => m.id === 'scrimmage-2' && !m.played);
@@ -364,107 +363,104 @@ const App: React.FC = () => {
   const currentMatch = getCurrentMatch();
 
   return (
-    <>
-      {isAdvancing && <LoadingScreen />}
-      
-      <Layout 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab}
-        gameYear={gameState.year}
-        gameWeek={gameState.week}
-        phase={gameState.phase}
-        schoolName={gameState.userSchool.name}
-      >
-        {activeTab === 'game' && gameState.activeGame ? (
-          <GameView 
-            game={gameState.activeGame} 
-            roster={gameState.roster} 
-            schoolName={gameState.userSchool.name} 
-            coach={gameState.coach}
-            onUpdate={handleGameUpdate} 
-            onFinish={handleGameFinish} 
-          />
-        ) : activeTab === 'dashboard' ? (
-          <div className="space-y-8">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <Dashboard state={gameState} onAdvance={handleAdvance} />
-              {currentMatch && (
-                <button 
-                  onClick={handlePlayGame}
-                  className="px-10 py-6 bg-amber-600 hover:bg-amber-500 text-white font-black text-2xl rounded-3xl shadow-2xl animate-bounce border-4 border-amber-400/20"
-                >
-                  PLAY {currentMatch.summary}
-                </button>
-              )}
-            </div>
+    <Layout 
+      activeTab={activeTab} 
+      onTabChange={setActiveTab}
+      gameYear={gameState.year}
+      gameWeek={gameState.week}
+      phase={gameState.phase}
+      schoolName={gameState.userSchool.name}
+    >
+      {activeTab === 'game' && gameState.activeGame ? (
+        <GameView 
+          game={gameState.activeGame} 
+          roster={gameState.roster} 
+          schoolName={gameState.userSchool.name} 
+          coach={gameState.coach}
+          onUpdate={handleGameUpdate} 
+          onFinish={handleGameFinish} 
+        />
+      ) : activeTab === 'dashboard' ? (
+        <div className="space-y-8">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <Dashboard state={gameState} onAdvance={handleAdvance} />
+            {currentMatch && (
+              <button 
+                onClick={handlePlayGame}
+                className="px-10 py-6 bg-amber-600 hover:bg-amber-500 text-white font-black text-2xl rounded-3xl shadow-2xl animate-bounce border-4 border-amber-400/20"
+              >
+                PLAY {currentMatch.summary}
+              </button>
+            )}
           </div>
-        ) : activeTab === 'depth_chart' ? (
-          <DepthChart roster={gameState.roster} onReorder={handleReorderRoster} />
-        ) : activeTab === 'roster' ? (
-          <Roster roster={gameState.roster} onCut={handleCutPlayer} />
-        ) : activeTab === 'stats' ? (
-          <Stats roster={gameState.roster} currentPhase={gameState.phase} />
-        ) : activeTab === 'recruiting' ? (
-          <Recruiting 
-            onRecruit={handleRecruit} 
-            onScout={handleScout}
-            coach={gameState.coach} 
-            recruitmentPool={gameState.recruitmentPool} 
-            scoutingPoints={gameState.scoutingPoints}
-            currentRosterCount={gameState.roster.length}
-            rosterCap={ROSTER_CAP}
-          />
-        ) : activeTab === 'staff' ? (
-          <StaffView 
-            currentStaff={gameState.staff} 
-            school={gameState.userSchool} 
-            gameWeek={gameState.week}
-            phase={gameState.phase}
-            onHire={handleHireStaff} 
-            onUpdateStyle={handleUpdateStaffStyle}
-          />
-        ) : activeTab === 'film_room' ? (
-          <FilmRoom />
-        ) : activeTab === 'settings' ? (
-          <SettingsView 
-            gameState={gameState} 
-            currentSlot={currentSlot}
-            lastSaved={lastSaved}
-            onSave={handleManualSave}
-            onExport={handleExportSave}
-            onImport={handleImportSave}
-            onReset={handleResetCareer}
-            onSwitchSlot={handleLoadSlot}
-          />
-        ) : activeTab === 'schedule' ? (
-          <div className="space-y-6">
-            <h2 className="text-3xl font-black text-white italic">Season Schedule</h2>
-            <div className="grid gap-4">
-              {gameState.schedule.map((game, idx) => (
-                <div key={idx} className={`glass p-6 rounded-3xl flex items-center justify-between border-l-4 ${game.summary === 'SCRIMMAGE' ? 'border-amber-500' : game.summary === 'PLAYOFF' ? 'border-rose-600' : 'border-blue-600'}`}>
-                  <div className="flex items-center gap-6">
-                    <div className="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center font-black text-blue-500 text-lg">W{game.week}</div>
-                    <div>
-                      <div className="font-black text-xl italic text-white">{game.opponentName}</div>
-                      <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{game.summary} • OVR {game.opponentRating}</div>
+        </div>
+      ) : activeTab === 'depth_chart' ? (
+        <DepthChart roster={gameState.roster} onReorder={handleReorderRoster} />
+      ) : activeTab === 'roster' ? (
+        <Roster roster={gameState.roster} onCut={handleCutPlayer} />
+      ) : activeTab === 'stats' ? (
+        <Stats roster={gameState.roster} currentPhase={gameState.phase} />
+      ) : activeTab === 'recruiting' ? (
+        <Recruiting 
+          onRecruit={handleRecruit} 
+          onScout={handleScout}
+          coach={gameState.coach} 
+          recruitmentPool={gameState.recruitmentPool} 
+          scoutingPoints={gameState.scoutingPoints}
+          currentRosterCount={gameState.roster.length}
+          rosterCap={ROSTER_CAP}
+        />
+      ) : activeTab === 'staff' ? (
+        <StaffView 
+          currentStaff={gameState.staff} 
+          school={gameState.userSchool} 
+          gameWeek={gameState.week}
+          phase={gameState.phase}
+          onHire={handleHireStaff} 
+          onUpdateStyle={handleUpdateStaffStyle}
+        />
+      ) : activeTab === 'film_room' ? (
+        <FilmRoom />
+      ) : activeTab === 'settings' ? (
+        <SettingsView 
+          gameState={gameState} 
+          currentSlot={currentSlot}
+          lastSaved={lastSaved}
+          onSave={handleManualSave}
+          onExport={handleExportSave}
+          onImport={handleImportSave}
+          onReset={handleResetCareer}
+          onSwitchSlot={handleLoadSlot}
+        />
+      ) : activeTab === 'schedule' ? (
+        <div className="space-y-6">
+          <h2 className="text-3xl font-black text-white italic">Season Schedule</h2>
+          <div className="grid gap-4">
+            {gameState.schedule.map((game, idx) => (
+              <div key={idx} className={`glass p-6 rounded-3xl flex items-center justify-between border-l-4 ${game.summary === 'SCRIMMAGE' ? 'border-amber-500' : game.summary === 'PLAYOFF' ? 'border-rose-600' : 'border-blue-600'}`}>
+                <div className="flex items-center gap-6">
+                  <div className="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center font-black text-blue-500 text-lg">W{game.week}</div>
+                  <div>
+                    <div className="font-black text-xl italic text-white">{game.opponentName}</div>
+                    <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{game.summary} • OVR {game.opponentRating}</div>
+                  </div>
+                </div>
+                {game.played ? (
+                  <div className="text-right">
+                    <div className={`text-3xl font-black italic ${ (game.homeTeamId === gameState.userSchool.id ? game.homeScore! > game.awayScore! : game.awayScore! > game.homeScore!) ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {game.homeScore} - {game.awayScore}
                     </div>
                   </div>
-                  {game.played ? (
-                    <div className="text-right">
-                      <div className={`text-3xl font-black italic ${ (game.homeTeamId === gameState.userSchool.id ? game.homeScore! > game.awayScore! : game.awayScore! > game.homeScore!) ? 'text-emerald-400' : 'text-rose-400'}`}>
-                        {game.homeScore} - {game.awayScore}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="px-6 py-2 bg-slate-900 text-slate-500 rounded-xl text-[10px] font-black uppercase tracking-widest">Upcoming</div>
-                  )}
-                </div>
-              ))}
-            </div>
+                ) : (
+                  <div className="px-6 py-2 bg-slate-900 text-slate-500 rounded-xl text-[10px] font-black uppercase tracking-widest">Upcoming</div>
+                )}
+              </div>
+            ))}
           </div>
-        ) : null}
-      </Layout>
-    </>
+        </div>
+      ) : null}
+      {isAdvancing && <LoadingScreen />}
+    </Layout>
   );
 };
 
