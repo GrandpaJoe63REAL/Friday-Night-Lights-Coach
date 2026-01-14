@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { SearchSource } from '../types.ts';
@@ -18,7 +17,8 @@ const FilmRoom: React.FC = () => {
     setSources([]);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: (process as any).env.API_KEY });
+      // Use the injected process.env.API_KEY directly as per guidelines
+      const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
       const response = await ai.models.generateContent({
         model: 'gemini-3-flash-preview',
         contents: `You are a legendary high school football coach. Provide a brief, tactical breakdown for this question: ${query}`,
