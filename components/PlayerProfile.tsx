@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Player, PlayerStats } from '../types';
+import { Player, PlayerStats } from '../types.ts';
 
 interface PlayerProfileProps {
   player: Player;
@@ -9,7 +8,6 @@ interface PlayerProfileProps {
 
 const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, onClose }) => {
   // Helper to aggregate stats across all phases (OFFSEASON, PRESEASON, REGULAR_SEASON, PLAYOFFS)
-  // Fix: Explicitly type the reduction to resolve 'unknown' property access errors
   const aggregateStats = (Object.values(player.stats) as PlayerStats[]).reduce(
     (acc: { passingYards: number; passingTds: number; rushingYards: number; rushingTds: number; gamesPlayed: number }, curr: PlayerStats) => ({
       passingYards: acc.passingYards + curr.passingYards,
@@ -22,7 +20,6 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, onClose }) => {
   );
 
   const isRecruit = aggregateStats.gamesPlayed === 0 && player.scoutingLevel !== undefined;
-  // USER REQUEST: Traits revealed after 2 scouting levels
   const traitsVisible = !isRecruit || player.scoutingLevel >= 2;
   const isFullyScouted = !isRecruit || player.scoutingLevel === 3;
 
@@ -136,7 +133,6 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, onClose }) => {
                 </>
               ) : (
                 <>
-                  {/* Aggregated stats are now safely typed */}
                   {player.position === 'QB' && (
                     <>
                       <StatSnippet label="Pass Yds" value={aggregateStats.passingYards.toFixed(0)} />

@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { Player, SeasonPhase } from '../types';
+import { Player, SeasonPhase } from '../types.ts';
 
 interface StatsProps {
   roster: Player[];
