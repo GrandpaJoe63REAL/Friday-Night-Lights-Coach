@@ -145,21 +145,11 @@ const App: React.FC = () => {
 
   const getCurrentMatch = () => {
     if (!gameState) return null;
-    if (gameState.phase === 'PRESEASON') {
-      if (gameState.week === 1) return gameState.schedule.find(m => m.id === 'scrimmage-1' && !m.played);
-      if (gameState.week === 2) return gameState.schedule.find(m => m.id === 'scrimmage-2' && !m.played);
-      return null;
-    }
-    
-    if (gameState.phase === 'REGULAR_SEASON') {
-      return gameState.schedule.find(m => m.summary === 'REGULAR' && m.week === gameState.week && !m.played);
-    }
-    
-    if (gameState.phase === 'PLAYOFFS') {
-      return gameState.schedule.find(m => m.summary === 'PLAYOFF' && m.week === gameState.week && !m.played);
-    }
-    
-    return null;
+    return gameState.schedule.find(m => m.week === gameState.week && !m.played && (
+      (gameState.phase === 'PRESEASON' && m.summary === 'SCRIMMAGE') ||
+      (gameState.phase === 'REGULAR_SEASON' && m.summary === 'REGULAR') ||
+      (gameState.phase === 'PLAYOFFS' && m.summary === 'PLAYOFF')
+    )) || null;
   };
 
   const handlePlayGame = () => {
