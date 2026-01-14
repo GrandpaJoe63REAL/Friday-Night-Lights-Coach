@@ -7,15 +7,13 @@
     <title>Friday Night Lights Coach</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <!-- Babel standalone to allow .tsx files to run in the browser without a build step -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
             background-color: #020617;
             color: #f8fafc;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
         }
         h1, h2, h3, .heading-font {
             font-family: 'Outfit', sans-serif;
@@ -25,28 +23,15 @@
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        #loader {
-            position: fixed;
-            inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #020617;
-            z-index: 100;
-            transition: opacity 0.8s ease;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
-        .error-overlay {
-            position: fixed;
-            inset: 0;
-            background: #450a0a;
-            color: #fecaca;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 200;
-            padding: 2rem;
-            text-align: center;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
         }
     </style>
     <script type="importmap">
@@ -63,68 +48,6 @@
 </script>
 </head>
 <body>
-    <div id="loader">
-        <div class="flex flex-col items-center gap-6">
-            <div class="text-7xl animate-bounce">🏈</div>
-            <div class="flex flex-col items-center gap-2">
-                <div class="text-[10px] font-black uppercase tracking-[0.5em] text-blue-500">System Booting</div>
-                <div class="w-48 h-1 bg-slate-900 rounded-full overflow-hidden">
-                    <div class="h-full bg-blue-600 animate-[loading_2s_ease-in-out_infinite]" style="width: 30%"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="error-display" class="error-overlay">
-        <h2 class="text-4xl font-black mb-4 italic">TECHNICAL FOUL</h2>
-        <p class="mb-6 font-medium max-w-md" id="error-message">The playbook failed to load. This usually happens when the browser blocks a script.</p>
-        <button onclick="location.reload()" class="px-8 py-3 bg-white text-rose-900 font-black rounded-xl">RETRY KICKOFF</button>
-    </div>
-
     <div id="root"></div>
-
-    <script type="text/babel" data-presets="react,typescript" data-type="module">
-        import './index.tsx';
-    </script>
-
-    <script>
-        // Global error catcher to help debug Vercel issues
-        window.onerror = function(msg, url, lineNo, columnNo, error) {
-            console.error('Crash detected:', msg, error);
-            const display = document.getElementById('error-display');
-            const message = document.getElementById('error-message');
-            if (display && message) {
-                display.style.display = 'flex';
-                message.innerText = `Error: ${msg}\nLine: ${lineNo}`;
-            }
-            return false;
-        };
-
-        // Hide loader once app is mounted
-        const checkApp = setInterval(() => {
-            if (document.querySelector('#root > *')) {
-                const loader = document.getElementById('loader');
-                if (loader) {
-                    loader.style.opacity = '0';
-                    setTimeout(() => loader.remove(), 800);
-                }
-                clearInterval(checkApp);
-            }
-        }, 100);
-
-        // Safety timeout for loader
-        setTimeout(() => {
-            const loader = document.getElementById('loader');
-            if (loader && loader.style.opacity !== '0') {
-                console.warn('App took too long to mount. Checking for errors.');
-            }
-        }, 5000);
-    </script>
-    <style>
-        @keyframes loading {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-    </style>
 </body>
 </html>

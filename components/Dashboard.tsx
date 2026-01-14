@@ -17,8 +17,13 @@ const Dashboard: React.FC<DashboardProps> = ({ state, onAdvance }) => {
   const config = PHASE_CONFIG[state.phase];
   const currentMonth = config.months[Math.floor((state.week - 1) / (config.weeks / config.months.length)) % config.months.length];
 
+  // FIX: Match scrimmage weeks 1 and 2 in PRESEASON
   const currentMatch = state.schedule.find(m => {
-    if (state.phase === 'PRESEASON') return m.summary === 'SCRIMMAGE' && m.week === (state.week - 4) && !m.played;
+    if (state.phase === 'PRESEASON') {
+        if (state.week === 1) return m.id === 'scrimmage-1' && !m.played;
+        if (state.week === 2) return m.id === 'scrimmage-2' && !m.played;
+        return false;
+    }
     if (state.phase === 'REGULAR_SEASON') return m.summary === 'REGULAR' && m.week === state.week && !m.played;
     if (state.phase === 'PLAYOFFS') return m.summary === 'PLAYOFF' && m.week === state.week && !m.played;
     return false;

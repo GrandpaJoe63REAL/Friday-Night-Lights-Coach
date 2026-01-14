@@ -145,10 +145,10 @@ const App: React.FC = () => {
 
   const getCurrentMatch = () => {
     if (!gameState) return null;
-    // PRESEASON SCRIMMAGES are on weeks 5 and 6 of the 6-week preseason
+    // FIX: Match scrimmage weeks 1 and 2 in PRESEASON
     if (gameState.phase === 'PRESEASON') {
-      if (gameState.week === 5) return gameState.schedule.find(m => m.id === 'scrimmage-1' && !m.played);
-      if (gameState.week === 6) return gameState.schedule.find(m => m.id === 'scrimmage-2' && !m.played);
+      if (gameState.week === 1) return gameState.schedule.find(m => m.id === 'scrimmage-1' && !m.played);
+      if (gameState.week === 2) return gameState.schedule.find(m => m.id === 'scrimmage-2' && !m.played);
       return null;
     }
     

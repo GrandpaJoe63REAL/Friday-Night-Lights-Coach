@@ -80,6 +80,7 @@ const createZeroStats = (): PlayerStats => ({
 export const generateScheduleForYear = (userSchool: School, leagueSchools: School[]): GameMatchup[] => {
   const schedule: GameMatchup[] = [];
   
+  // FIX: Make Scrimmages happen in Week 1 and 2 of PRESEASON
   for (let w = 1; w <= 2; w++) {
     const opponent = pickOne(leagueSchools);
     schedule.push({
@@ -260,8 +261,9 @@ export const advanceWeek = (state: GameState): GameState => {
   const strengthCoach = newState.staff.find(s => s.role === 'Strength Coach');
   const academicAdvisor = newState.staff.find(s => s.role === 'Academic Advisor');
 
+  // FIX: Preseason week matching
   const currentMatch = newState.schedule.find(m => {
-    if (newState.phase === 'PRESEASON') return m.summary === 'SCRIMMAGE' && m.week === (newState.week - 4) && !m.played;
+    if (newState.phase === 'PRESEASON') return m.summary === 'SCRIMMAGE' && m.week === newState.week && !m.played;
     if (newState.phase === 'REGULAR_SEASON') return m.summary === 'REGULAR' && m.week === newState.week && !m.played;
     if (newState.phase === 'PLAYOFFS') return m.summary === 'PLAYOFF' && m.week === newState.week && !m.played;
     return false;
