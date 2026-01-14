@@ -1,5 +1,6 @@
-import { Player, School, Staff, Position, EnrollmentSize, PlayerStats, RecruitSource, SeasonPhase } from '../types';
-import { FIRST_NAMES, LAST_NAMES, POSITIONS, TRAITS, ENROLLMENTS, SCHOOL_NAMES, OFFENSIVE_PHILOSOPHIES, DEFENSIVE_PHILOSOPHIES, SUPPORT_PHILOSOPHIES, ALMA_MATERS, ARCHETYPES_BY_POSITION } from '../constants';
+
+import { Player, School, Staff, Position, EnrollmentSize, PlayerStats, RecruitSource, SeasonPhase } from '../types.ts';
+import { FIRST_NAMES, LAST_NAMES, POSITIONS, TRAITS, ENROLLMENTS, SCHOOL_NAMES, OFFENSIVE_PHILOSOPHIES, DEFENSIVE_PHILOSOPHIES, SUPPORT_PHILOSOPHIES, ALMA_MATERS, ARCHETYPES_BY_POSITION } from '../constants.ts';
 
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
 
@@ -21,8 +22,6 @@ const createInitialStats = (): PlayerStats => ({
 });
 
 export const generatePlayer = (grade?: 8 | 9 | 10 | 11 | 12, pos?: Position, source?: RecruitSource): Player => {
-  // Use nullish coalescing to safely handle potential grade 0 or undefined.
-  // We explicitly cast the random pick to the expected union type.
   let g: 8 | 9 | 10 | 11 | 12 = grade ?? (pickOne([9, 10, 11, 12] as const) as 9 | 10 | 11 | 12);
   let p = pos || pickOne(POSITIONS);
   
@@ -32,7 +31,6 @@ export const generatePlayer = (grade?: 8 | 9 | 10 | 11 | 12, pos?: Position, sou
     p = pickOne(['DE', 'DT']);
   }
 
-  // Constraint: 8th graders ONLY come from Middle School.
   let finalSource = source || 'Walk-On';
   if (g === 8) {
     finalSource = 'Middle School';
@@ -52,7 +50,6 @@ export const generatePlayer = (grade?: 8 | 9 | 10 | 11 | 12, pos?: Position, sou
     hands: rand(base - 10, base + 10),
   };
 
-  // Archetype Modifiers
   switch (archetype) {
     case 'Strong Arm': ratings.strength += 15; ratings.speed -= 5; break;
     case 'Scrambler': ratings.speed += 15; ratings.strength -= 5; break;
@@ -68,7 +65,6 @@ export const generatePlayer = (grade?: 8 | 9 | 10 | 11 | 12, pos?: Position, sou
     case 'Accurate': ratings.awareness += 15; break;
   }
 
-  // Recalculate OVR based on new ratings
   const newOvr = Math.round((ratings.speed + ratings.strength + ratings.awareness + ratings.tackling + ratings.hands) / 5);
 
   const playerTraits: string[] = [];

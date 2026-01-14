@@ -9,16 +9,18 @@ interface PlayerProfileProps {
 
 const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, onClose }) => {
   // Helper to aggregate stats across all phases (OFFSEASON, PRESEASON, REGULAR_SEASON, PLAYOFFS)
-  // Fix: Explicitly type 'curr' as PlayerStats and the accumulator to resolve 'unknown' property access errors
-  const aggregateStats = Object.values(player.stats).reduce((acc, curr: PlayerStats) => ({
-    passingYards: acc.passingYards + curr.passingYards,
-    passingTds: acc.passingTds + curr.passingTds,
-    rushingYards: acc.rushingYards + curr.rushingYards,
-    rushingTds: acc.rushingTds + curr.rushingTds,
-    gamesPlayed: acc.gamesPlayed + curr.gamesPlayed,
-  }), { passingYards: 0, passingTds: 0, rushingYards: 0, rushingTds: 0, gamesPlayed: 0 });
+  // Fix: Explicitly type the reduction to resolve 'unknown' property access errors
+  const aggregateStats = (Object.values(player.stats) as PlayerStats[]).reduce(
+    (acc: { passingYards: number; passingTds: number; rushingYards: number; rushingTds: number; gamesPlayed: number }, curr: PlayerStats) => ({
+      passingYards: acc.passingYards + curr.passingYards,
+      passingTds: acc.passingTds + curr.passingTds,
+      rushingYards: acc.rushingYards + curr.rushingYards,
+      rushingTds: acc.rushingTds + curr.rushingTds,
+      gamesPlayed: acc.gamesPlayed + curr.gamesPlayed,
+    }),
+    { passingYards: 0, passingTds: 0, rushingYards: 0, rushingTds: 0, gamesPlayed: 0 }
+  );
 
-  // Fix: Property access errors resolved by using aggregateStats
   const isRecruit = aggregateStats.gamesPlayed === 0 && player.scoutingLevel !== undefined;
   // USER REQUEST: Traits revealed after 2 scouting levels
   const traitsVisible = !isRecruit || player.scoutingLevel >= 2;
@@ -134,7 +136,7 @@ const PlayerProfile: React.FC<PlayerProfileProps> = ({ player, onClose }) => {
                 </>
               ) : (
                 <>
-                  {/* Fix: Accessing aggregated stats instead of the stats record directly */}
+                  {/* Aggregated stats are now safely typed */}
                   {player.position === 'QB' && (
                     <>
                       <StatSnippet label="Pass Yds" value={aggregateStats.passingYards.toFixed(0)} />

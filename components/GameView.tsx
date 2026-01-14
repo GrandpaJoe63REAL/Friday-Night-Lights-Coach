@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { ActiveGame, Player, TeamGameStats, CoachProfile } from '../types';
-import { executeSinglePlay, executeCoachPlay, calculateTeamRating } from '../engine/gameLogic';
+import { ActiveGame, Player, TeamGameStats, CoachProfile } from '../types.ts';
+import { executeSinglePlay, executeCoachPlay, calculateTeamRating } from '../engine/gameLogic.ts';
 
 interface GameViewProps {
   game: ActiveGame;
@@ -90,7 +90,6 @@ const GameView: React.FC<GameViewProps> = ({ game, roster, schoolName, coach, on
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto h-full flex flex-col pb-8">
-      {/* Scoreboard */}
       <div className="glass p-6 rounded-[2.5rem] flex items-center justify-between border-b-4 border-blue-600 shadow-xl">
         <div className="flex items-center gap-10">
           <div className="text-center">
@@ -119,7 +118,6 @@ const GameView: React.FC<GameViewProps> = ({ game, roster, schoolName, coach, on
         </div>
       </div>
 
-      {/* Field View (Time Lapse Display) */}
       <div className="relative h-28 bg-emerald-950/60 rounded-[2.5rem] border-2 border-emerald-500/30 overflow-hidden flex items-center shadow-2xl">
         <div className="absolute inset-y-0 left-0 w-4 bg-blue-600/80 shadow-[10px_0_20px_rgba(37,99,235,0.4)] z-10" />
         <div className="absolute inset-y-0 right-0 w-4 bg-rose-600/80 shadow-[-10px_0_20px_rgba(225,29,72,0.4)] z-10" />

@@ -1,18 +1,18 @@
 
 import React, { useState, useEffect } from 'react';
-import { GameState, Player, ActiveGame, Staff, CoachProfile } from './types';
-import { createInitialState, advanceWeek, startInteractiveGame } from './engine/gameLogic';
-import Layout from './components/Layout';
-import Dashboard from './components/Dashboard';
-import Roster from './components/Roster';
-import Recruiting from './components/Recruiting';
-import Stats from './components/Stats';
-import GameView from './components/GameView';
-import StaffView from './components/StaffView';
-import CoachCreation from './components/CoachCreation';
-import DepthChart from './components/DepthChart';
-import LoadingScreen from './components/LoadingScreen';
-import SettingsView from './components/SettingsView';
+import { GameState, Player, ActiveGame, Staff, CoachProfile } from './types.ts';
+import { createInitialState, advanceWeek, startInteractiveGame } from './engine/gameLogic.ts';
+import Layout from './components/Layout.tsx';
+import Dashboard from './components/Dashboard.tsx';
+import Roster from './components/Roster.tsx';
+import Recruiting from './components/Recruiting.tsx';
+import Stats from './components/Stats.tsx';
+import GameView from './components/GameView.tsx';
+import StaffView from './components/StaffView.tsx';
+import CoachCreation from './components/CoachCreation.tsx';
+import DepthChart from './components/DepthChart.tsx';
+import LoadingScreen from './components/LoadingScreen.tsx';
+import SettingsView from './components/SettingsView.tsx';
 
 const ROSTER_CAP = 53;
 const SAVE_SLOTS = ['slot_1', 'slot_2', 'slot_3'];
@@ -42,14 +42,11 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Auto-save whenever gameState changes
   useEffect(() => {
     if (gameState) {
       const updatedState = { ...gameState, lastSaved: Date.now() };
       localStorage.setItem(`hs_football_coach_${currentSlot}`, JSON.stringify(updatedState));
       localStorage.setItem('hs_football_coach_active_slot', currentSlot);
-      // We don't setLastSaved(updatedState.lastSaved) here to avoid infinite loop, 
-      // but the state itself has it.
     }
   }, [gameState, currentSlot]);
 

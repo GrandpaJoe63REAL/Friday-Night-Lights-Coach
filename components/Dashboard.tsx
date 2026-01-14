@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { GameState, Player, Position } from '../types';
-import { calculateTeamRating, calculateOffensiveRating, calculateDefensiveRating } from '../engine/gameLogic';
-import { PHASE_CONFIG } from '../constants';
+import { GameState, Player, Position } from '../types.ts';
+import { calculateTeamRating, calculateOffensiveRating, calculateDefensiveRating } from '../engine/gameLogic.ts';
+import { PHASE_CONFIG } from '../constants.ts';
 
 interface DashboardProps {
   state: GameState;
@@ -26,16 +26,13 @@ const Dashboard: React.FC<DashboardProps> = ({ state, onAdvance }) => {
 
   const injuredPlayers = state.roster.filter(p => p.injuryStatus === 'Out');
   
-  // Players who progressed the most this week
   const topImprovers = [...state.roster]
     .filter(p => (p.lastOvrChange || 0) > 0)
     .sort((a, b) => (b.lastOvrChange || 0) - (a.lastOvrChange || 0))
     .slice(0, 5);
 
-  // Checklist Logic
   const isRecruitmentComplete = state.scoutingPoints === 0 || state.recruitmentPool.length === 0;
   
-  // Roster is "Updated" if no starters are currently injured
   const positionsToCheck: Position[] = ['QB', 'RB', 'WR', 'TE', 'LT', 'LG', 'C', 'RG', 'RT', 'DE', 'DT', 'LB', 'CB', 'S', 'K', 'P'];
   const injuredStarters = positionsToCheck.some(pos => {
     const playersAtPos = state.roster.filter(p => p.position === pos);
@@ -43,10 +40,7 @@ const Dashboard: React.FC<DashboardProps> = ({ state, onAdvance }) => {
   });
   const isRosterUpdated = !injuredStarters;
 
-  // Training is "Set" if staff style values have been tweaked from default 50
   const isTrainingSet = state.staff.some(s => s.styleValue !== 50);
-
-  // Game is "Played" if there's no active match pending
   const isGamePlayed = !currentMatch;
 
   const checklistItems = [
@@ -134,7 +128,6 @@ const Dashboard: React.FC<DashboardProps> = ({ state, onAdvance }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-        {/* Checklist */}
         <div className="glass rounded-[2.5rem] p-8 border-t-8 border-amber-500 shadow-2xl bg-slate-900/40">
           <h3 className="font-black text-xl italic mb-6 flex items-center gap-2 text-white">
             <span className="text-amber-500">📋</span> Coach's Checklist
@@ -169,7 +162,6 @@ const Dashboard: React.FC<DashboardProps> = ({ state, onAdvance }) => {
           </div>
         </div>
 
-        {/* Weekly Growth - NEW */}
         <div className="glass rounded-3xl p-6 border-l-4 border-emerald-500">
            <h3 className="font-black text-xl italic mb-6 flex items-center gap-2">
              <span className="text-emerald-500">📈</span> Weekly Growth
@@ -198,7 +190,6 @@ const Dashboard: React.FC<DashboardProps> = ({ state, onAdvance }) => {
            </div>
         </div>
 
-        {/* Injury Report */}
         <div className="glass rounded-3xl p-6 border-l-4 border-rose-600">
            <h3 className="font-black text-xl italic mb-6">Injury Report</h3>
            <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
@@ -223,7 +214,6 @@ const Dashboard: React.FC<DashboardProps> = ({ state, onAdvance }) => {
            </div>
         </div>
 
-        {/* Season Log */}
         <div className="glass rounded-3xl p-6">
            <h3 className="font-black text-xl italic mb-6">Recent Results</h3>
            <div className="space-y-4">

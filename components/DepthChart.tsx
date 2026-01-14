@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Player, Position } from '../types';
+import { Player, Position } from '../types.ts';
 
 interface DepthChartProps {
   roster: Player[];
@@ -57,7 +57,6 @@ const DepthChart: React.FC<DepthChartProps> = ({ roster, onReorder }) => {
   const [activeGroup, setActiveGroup] = useState<Group>('OFFENSE');
   const [movingPlayerId, setMovingPlayerId] = useState<string | null>(null);
 
-  // Keyboard Navigation (Q/E)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const groups: Group[] = ['OFFENSE', 'DEFENSE', 'SPECIAL TEAMS', 'SPECIALISTS'];
@@ -91,9 +90,7 @@ const DepthChart: React.FC<DepthChartProps> = ({ roster, onReorder }) => {
 
   const handleAutoReorder = () => {
     const newRoster = [...roster].sort((a, b) => {
-      // Primary sort by position name to group them (optional but cleaner for global roster)
       if (a.position !== b.position) return a.position.localeCompare(b.position);
-      // Secondary sort by Overall descending
       return b.overall - a.overall;
     });
     onReorder(newRoster);
@@ -134,7 +131,6 @@ const DepthChart: React.FC<DepthChartProps> = ({ roster, onReorder }) => {
                   ${player.injuryStatus === 'Out' ? 'opacity-50 grayscale' : ''}
                 `}
               >
-                {/* Starter Badge */}
                 {isStarter && (
                   <div className="absolute -top-2 -left-2 bg-blue-600 text-[8px] font-black px-1.5 py-0.5 rounded shadow-lg uppercase tracking-tighter">1st Team</div>
                 )}
@@ -151,7 +147,6 @@ const DepthChart: React.FC<DepthChartProps> = ({ roster, onReorder }) => {
                   <span className="text-[8px] font-black text-slate-500 uppercase tracking-widest">{player.position}</span>
                 </div>
 
-                {/* Direct Manipulation Controls */}
                 {isMoving && (
                   <div className="absolute inset-y-0 right-0 flex flex-col justify-center gap-1 pr-1 bg-gradient-to-l from-amber-500/20 to-transparent rounded-r-xl">
                     <button 
@@ -167,12 +162,6 @@ const DepthChart: React.FC<DepthChartProps> = ({ roster, onReorder }) => {
               </div>
             );
           })}
-
-          {players.length === 0 && (
-            <div className="flex-1 flex items-center justify-center p-4 text-center">
-              <span className="text-[8px] font-black text-slate-700 uppercase tracking-widest">No Players</span>
-            </div>
-          )}
         </div>
       </div>
     );
@@ -203,7 +192,6 @@ const DepthChart: React.FC<DepthChartProps> = ({ roster, onReorder }) => {
 
       <div className="flex-1 flex flex-col lg:flex-row gap-6 min-h-0">
         <div className="flex-1 bg-black/40 rounded-[2.5rem] p-8 border border-white/5 overflow-x-auto overflow-y-hidden custom-scrollbar shadow-2xl relative">
-          {/* Stadium Background Overlay */}
           <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540747913346-19e3adbb17c3?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-5 pointer-events-none grayscale" />
           
           <div className="flex gap-6 h-full relative z-10">
@@ -211,7 +199,6 @@ const DepthChart: React.FC<DepthChartProps> = ({ roster, onReorder }) => {
           </div>
         </div>
 
-        {/* Right Action Panel */}
         <aside className="lg:w-80 flex flex-col gap-6">
           <div className="glass p-6 rounded-[2rem] border-l-4 border-amber-500 shadow-xl bg-slate-900/40">
             <h3 className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-4">Depth Summary</h3>
@@ -247,11 +234,6 @@ const DepthChart: React.FC<DepthChartProps> = ({ roster, onReorder }) => {
              >
                Sort by Potential
              </button>
-             <div className="mt-4 p-4 bg-blue-600/10 rounded-2xl border border-blue-500/20">
-               <p className="text-[10px] text-blue-200/60 font-medium leading-relaxed italic">
-                 "Tip: Starters play nearly 100% of snaps in simulation. Backups only enter if the starter is injured or fatigue hits 20%."
-               </p>
-             </div>
           </div>
         </aside>
       </div>

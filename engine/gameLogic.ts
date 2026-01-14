@@ -1,7 +1,7 @@
 
-import { GameState, Player, GameMatchup, ActiveGame, TeamGameStats, CoachProfile, SeasonPhase, RecruitSource, School, Position, PlayerStats, Staff } from '../types';
-import { generatePlayer, generateSchool, generateStaff } from './generators';
-import { PHASE_CONFIG } from '../constants';
+import { GameState, Player, GameMatchup, ActiveGame, TeamGameStats, CoachProfile, SeasonPhase, RecruitSource, School, Position, PlayerStats, Staff } from '../types.ts';
+import { generatePlayer, generateSchool, generateStaff } from './generators.ts';
+import { PHASE_CONFIG } from '../constants.ts';
 
 export const calculateTeamRating = (roster: Player[]): number => {
   if (!roster || roster.length === 0) return 0;
@@ -404,9 +404,8 @@ export const advanceWeek = (state: GameState): GameState => {
 };
 
 const resetSeason = (state: GameState) => {
-  // Push to career history before clearing
   const record = `${state.career.wins}-${state.career.losses}`;
-  const titlesGained = state.phase === 'PLAYOFFS' && state.career.wins > 8 ? 1 : 0; // Simple logic: deep playoff run or wins
+  const titlesGained = state.phase === 'PLAYOFFS' && state.career.wins > 8 ? 1 : 0;
   const achievement = titlesGained > 0 ? "State Champion" : state.career.wins >= 5 ? "Playoff Appearance" : "Rebuilding Year";
   
   state.history.push({

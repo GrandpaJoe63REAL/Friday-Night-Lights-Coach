@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Player } from '../types';
-import PlayerProfile from './PlayerProfile';
+import { Player } from '../types.ts';
+import PlayerProfile from './PlayerProfile.tsx';
 
 interface RosterProps {
   roster: Player[];
@@ -36,14 +36,12 @@ const Roster: React.FC<RosterProps> = ({ roster, onCut }) => {
     let valA = a[sortKey] ?? '';
     let valB = b[sortKey] ?? '';
 
-    // Handle string comparisons
     if (typeof valA === 'string' && typeof valB === 'string') {
       return sortDirection === 'asc' 
         ? valA.localeCompare(valB) 
         : valB.localeCompare(valA);
     }
 
-    // Handle numeric comparisons
     const numA = valA as number;
     const numB = valB as number;
     return sortDirection === 'asc' ? numA - numB : numB - numA;

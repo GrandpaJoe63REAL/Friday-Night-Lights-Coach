@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Player, CoachProfile, RecruitSource } from '../types';
-import PlayerProfile from './PlayerProfile';
+import { Player, CoachProfile, RecruitSource } from '../types.ts';
+import PlayerProfile from './PlayerProfile.tsx';
 
 interface RecruitingProps {
   onRecruit: (player: Player) => void;
@@ -41,14 +41,13 @@ const Recruiting: React.FC<RecruitingProps> = ({
 
     setRecruitingEnergy(prev => prev - 1);
     
-    // Archetype bonuses
     const recruiterBonus = coach.archetype === 'Recruiter' ? 20 : 0;
     const successChance = (player.interestLevel + recruiterBonus) / 100;
     
     const roll = Math.random();
     if (roll < successChance) {
       alert(`COMMITMENT! ${player.name} has signed with the program!`);
-      onRecruit({ ...player, scoutingLevel: 3 }); // Commits are fully scouted
+      onRecruit({ ...player, scoutingLevel: 3 });
     } else {
       alert(`${player.name} is leaning elsewhere. Their interest dropped.`);
       player.interestLevel = Math.max(0, player.interestLevel - 15);
@@ -118,7 +117,6 @@ const Recruiting: React.FC<RecruitingProps> = ({
         </div>
       </header>
 
-      {/* Tabs */}
       <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
         {['All', 'Middle School', 'Youth League', 'Transfer Portal', 'Other Sport'].map((tab) => (
           <button
@@ -145,7 +143,6 @@ const Recruiting: React.FC<RecruitingProps> = ({
         </div>
       )}
 
-      {/* Prospects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPool.length > 0 ? (
           filteredPool.map((prospect) => (
@@ -240,17 +237,6 @@ const Recruiting: React.FC<RecruitingProps> = ({
           onClose={() => setSelectedProspect(null)} 
         />
       )}
-
-      {/* Tip */}
-      <div className="bg-blue-600/5 border border-blue-500/10 p-6 rounded-[2rem] flex items-start gap-4">
-        <div className="text-2xl">💡</div>
-        <p className="text-sm text-blue-200/70 font-medium">
-          <strong className="text-blue-200 uppercase">Coach Insight:</strong> 
-          {coach.archetype === 'Recruiter' 
-            ? " Your reputation as a top-tier Recruiter gives you a massive +20% boost to closing deals on every prospect." 
-            : " spend scouting points on high-interest prospects first to ensure you don't commit to a 'bust' with a low OVR."}
-        </p>
-      </div>
     </div>
   );
 };

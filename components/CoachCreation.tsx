@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { CoachProfile, CoachArchetype } from '../types';
+import { CoachProfile, CoachArchetype } from '../types.ts';
 
 interface CoachCreationProps {
   onComplete: (profile: CoachProfile, teamName: string) => void;
@@ -60,7 +60,6 @@ const CoachCreation: React.FC<CoachCreationProps> = ({ onComplete }) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-12">
-          {/* Section 1: Identity */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-widest text-blue-400 ml-4">Coach Name</label>
@@ -84,7 +83,6 @@ const CoachCreation: React.FC<CoachCreationProps> = ({ onComplete }) => {
             </div>
           </div>
 
-          {/* Section 2: Appearance */}
           <div className="space-y-6">
             <div className="flex items-center gap-4">
                <div className="h-px flex-1 bg-white/5" />
@@ -108,7 +106,6 @@ const CoachCreation: React.FC<CoachCreationProps> = ({ onComplete }) => {
             </div>
           </div>
 
-          {/* Section 3: Archetype */}
           <div className="space-y-6">
             <div className="flex items-center gap-4">
                <div className="h-px flex-1 bg-white/5" />

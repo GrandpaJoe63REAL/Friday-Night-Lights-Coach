@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Staff, School, SeasonPhase } from '../types';
-import { generateStaff } from '../engine/generators';
+import { Staff, School, SeasonPhase } from '../types.ts';
+import { generateStaff } from '../engine/generators.ts';
 
 interface StaffViewProps {
   currentStaff: Staff[];
@@ -16,7 +16,6 @@ const StaffView: React.FC<StaffViewProps> = ({ currentStaff, school, gameWeek, p
   const [activeCandidateRole, setActiveCandidateRole] = useState<Staff['role']>('Offensive Coordinator');
   const [availableCandidates, setAvailableCandidates] = useState<Staff[]>([]);
 
-  // Refresh available candidates whenever the week or phase changes
   useEffect(() => {
     const roles: Staff['role'][] = [
       'Offensive Coordinator', 
@@ -25,7 +24,6 @@ const StaffView: React.FC<StaffViewProps> = ({ currentStaff, school, gameWeek, p
       'Academic Advisor'
     ];
     
-    // Generate 3 candidates for each role for the week
     const newPool: Staff[] = [];
     roles.forEach(role => {
       for (let i = 0; i < 3; i++) {
@@ -92,7 +90,6 @@ const StaffView: React.FC<StaffViewProps> = ({ currentStaff, school, gameWeek, p
 
     if (confirm(message)) {
       onHire(candidate, cost);
-      // Remove hired candidate from the pool so they can't be hired again or seen
       setAvailableCandidates(prev => prev.filter(c => c.id !== candidate.id));
     }
   };
@@ -223,12 +220,6 @@ const StaffView: React.FC<StaffViewProps> = ({ currentStaff, school, gameWeek, p
               </button>
             </div>
           ))}
-          {filteredCandidates.length === 0 && (
-            <div className="col-span-full flex flex-col items-center justify-center py-20 opacity-40">
-              <div className="text-4xl mb-2">🤝</div>
-              <p className="text-xs font-black uppercase tracking-widest">No candidates available for this role</p>
-            </div>
-          )}
         </div>
       </section>
     </div>

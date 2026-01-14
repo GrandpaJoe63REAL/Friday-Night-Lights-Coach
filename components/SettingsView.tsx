@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { GameState } from '../types';
+import { GameState } from '../types.ts';
 
 interface SettingsViewProps {
   gameState: GameState;
@@ -48,7 +48,6 @@ const SettingsView: React.FC<SettingsViewProps> = ({
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Save Slots */}
         <section className="glass rounded-[2.5rem] p-8 space-y-6">
           <h3 className="text-xs font-black text-blue-400 uppercase tracking-widest mb-4 flex items-center gap-2">
             <span>💾</span> Save Management
@@ -98,7 +97,6 @@ const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
         </section>
 
-        {/* Data Portability */}
         <section className="glass rounded-[2.5rem] p-8 space-y-6 flex flex-col">
           <h3 className="text-xs font-black text-amber-500 uppercase tracking-widest mb-4 flex items-center gap-2">
             <span>🔌</span> Program Portability
@@ -139,7 +137,6 @@ const SettingsView: React.FC<SettingsViewProps> = ({
         </section>
       </div>
 
-      {/* Career History */}
       <section className="glass rounded-[2.5rem] p-8 space-y-6 shadow-2xl">
         <h3 className="text-xl font-black text-white italic uppercase tracking-tight flex items-center gap-2">
           <span className="text-blue-500">🏆</span> Program Hall of Fame
