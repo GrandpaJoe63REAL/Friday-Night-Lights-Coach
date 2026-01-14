@@ -4,6 +4,7 @@ import { CoachProfile, CoachArchetype } from '../types.ts';
 
 interface CoachCreationProps {
   onComplete: (profile: CoachProfile, teamName: string) => void;
+  onCancel?: () => void;
 }
 
 const APPEARANCES = [
@@ -34,7 +35,7 @@ const ARCHETYPES: { id: CoachArchetype; label: string; icon: string; description
   },
 ];
 
-const CoachCreation: React.FC<CoachCreationProps> = ({ onComplete }) => {
+const CoachCreation: React.FC<CoachCreationProps> = ({ onComplete, onCancel }) => {
   const [name, setName] = useState('');
   const [teamName, setTeamName] = useState('East High Eagles');
   const [appearance, setAppearance] = useState('suit');
@@ -54,9 +55,16 @@ const CoachCreation: React.FC<CoachCreationProps> = ({ onComplete }) => {
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-slate-950 to-black pointer-events-none" />
       
       <div className="relative max-w-4xl w-full glass p-8 md:p-12 rounded-[3.5rem] shadow-2xl border-t-8 border-blue-600 animate-in fade-in zoom-in-95 duration-700 my-12">
-        <div className="text-center mb-10">
-          <h2 className="text-5xl font-black uppercase italic tracking-tighter mb-2">Build Your Legacy</h2>
-          <p className="text-slate-400 font-medium">Define your coaching style and choose your program.</p>
+        <div className="flex justify-between items-start mb-10">
+            <div className="text-left">
+                <h2 className="text-5xl font-black uppercase italic tracking-tighter mb-2">Build Your Legacy</h2>
+                <p className="text-slate-400 font-medium">Define your coaching style and choose your program.</p>
+            </div>
+            {onCancel && (
+                <button onClick={onCancel} className="p-3 hover:bg-white/10 rounded-2xl text-slate-500 hover:text-white transition-colors">
+                    ✕
+                </button>
+            )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-12">

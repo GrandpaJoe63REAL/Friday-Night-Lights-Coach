@@ -119,10 +119,15 @@ const App: React.FC = () => {
   };
 
   const handleCoachCreationComplete = (profile: CoachProfile, teamName: string) => {
-    const freshState = createInitialState(profile, teamName);
-    setGameState(freshState);
-    setIsGameStarted(true);
-    setShowCoachCreation(false);
+    try {
+      const freshState = createInitialState(profile, teamName);
+      setGameState(freshState);
+      setIsGameStarted(true);
+      setShowCoachCreation(false);
+    } catch (err) {
+      console.error("Coach Creation Error:", err);
+      alert("Failed to initialize program. Check console for details.");
+    }
   };
 
   const handleAdvance = () => {
@@ -140,12 +145,22 @@ const App: React.FC = () => {
 
   const getCurrentMatch = () => {
     if (!gameState) return null;
-    return gameState.schedule.find(m => {
-      if (gameState.phase === 'PRESEASON') return m.summary === 'SCRIMMAGE' && m.week === (gameState.week - 4) && !m.played;
-      if (gameState.phase === 'REGULAR_SEASON') return m.summary === 'REGULAR' && m.week === gameState.week && !m.played;
-      if (gameState.phase === 'PLAYOFFS') return m.summary === 'PLAYOFF' && m.week === gameState.week && !m.played;
-      return false;
-    });
+    // PRESEASON SCRIMMAGES are on weeks 5 and 6 of the 6-week preseason
+    if (gameState.phase === 'PRESEASON') {
+      if (gameState.week === 5) return gameState.schedule.find(m => m.id === 'scrimmage-1' && !m.played);
+      if (gameState.week === 6) return gameState.schedule.find(m => m.id === 'scrimmage-2' && !m.played);
+      return null;
+    }
+    
+    if (gameState.phase === 'REGULAR_SEASON') {
+      return gameState.schedule.find(m => m.summary === 'REGULAR' && m.week === gameState.week && !m.played);
+    }
+    
+    if (gameState.phase === 'PLAYOFFS') {
+      return gameState.schedule.find(m => m.summary === 'PLAYOFF' && m.week === gameState.week && !m.played);
+    }
+    
+    return null;
   };
 
   const handlePlayGame = () => {
@@ -297,35 +312,47 @@ const App: React.FC = () => {
   };
 
   if (showCoachCreation) {
-    return <CoachCreation onComplete={handleCoachCreationComplete} />;
+    return <CoachCreation onComplete={handleCoachCreationComplete} onCancel={() => setShowCoachCreation(false)} />;
   }
 
   if (!isGameStarted) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-slate-950 text-white p-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540747913346-19e3adbb17c3?auto=format&fit=crop&q=80')] opacity-10 bg-cover bg-center" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
-        <div className="relative text-center max-w-2xl animate-in zoom-in-90 duration-700">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1540747913346-19e3adbb17c3?auto=format&fit=crop&q=80')] opacity-20 bg-cover bg-center grayscale" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+        <div className="relative text-center max-w-2xl animate-in zoom-in-90 duration-1000">
+          <div className="inline-block px-4 py-1.5 bg-blue-600/10 border border-blue-500/30 rounded-full text-[10px] font-black uppercase tracking-[0.4em] text-blue-500 mb-6 animate-pulse">
+            Gridiron Dynasty Simulation
+          </div>
           <h1 className="text-7xl md:text-8xl font-black uppercase tracking-tighter mb-4 italic text-white leading-none">
-            Friday Night Lights <br/><span className="text-blue-600">Coach</span>
+            Friday Night <br/><span className="text-blue-600">Lights Coach</span>
           </h1>
           <p className="text-slate-400 text-lg md:text-xl font-medium mb-12 max-w-lg mx-auto leading-relaxed">
             The most realistic high school football management simulator. Build a legacy, manage students, and win the State Championship.
           </p>
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4">
-            <button onClick={handleStartNewCareer} className="px-12 py-5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xl rounded-2xl shadow-2xl transition-all transform hover:scale-105 active:scale-95 border-b-8 border-blue-900">
-              START CAREER
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+            <button 
+                onClick={handleStartNewCareer} 
+                className="px-12 py-5 bg-blue-600 hover:bg-blue-500 text-white font-black text-xl rounded-2xl shadow-[0_20px_50px_rgba(37,99,235,0.3)] transition-all transform hover:scale-105 active:scale-95 border-b-8 border-blue-900 group"
+            >
+              <span className="flex items-center gap-3">
+                START NEW CAREER
+                <span className="text-2xl group-hover:translate-x-1 transition-transform">➔</span>
+              </span>
             </button>
-            <div className="flex gap-2 bg-slate-900/50 p-2 rounded-2xl border border-white/5">
-              {SAVE_SLOTS.map(slot => (
-                <button 
-                  key={slot} 
-                  onClick={() => handleLoadSlot(slot)}
-                  className={`px-4 py-2 text-[10px] font-black uppercase rounded-lg border transition-all ${localStorage.getItem(`hs_football_coach_${slot}`) ? 'border-amber-500/50 text-amber-500 hover:bg-amber-500/10' : 'border-slate-700 text-slate-700 opacity-50'}`}
-                >
-                  {slot.replace('_', ' ')}
-                </button>
-              ))}
+            <div className="flex flex-col gap-2">
+                <div className="text-[10px] font-black uppercase text-slate-500 tracking-widest mb-1">Continue Journey</div>
+                <div className="flex gap-2 bg-slate-900/50 p-2 rounded-2xl border border-white/5">
+                {SAVE_SLOTS.map(slot => (
+                    <button 
+                    key={slot} 
+                    onClick={() => handleLoadSlot(slot)}
+                    className={`px-4 py-2 text-[10px] font-black uppercase rounded-lg border transition-all ${localStorage.getItem(`hs_football_coach_${slot}`) ? 'border-amber-500/50 text-amber-500 hover:bg-amber-500/10' : 'border-slate-700 text-slate-700 opacity-50'}`}
+                    >
+                    {slot.replace('_', ' ')}
+                    </button>
+                ))}
+                </div>
             </div>
           </div>
         </div>
