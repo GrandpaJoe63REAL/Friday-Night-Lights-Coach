@@ -13,6 +13,7 @@ import CoachCreation from './components/CoachCreation.tsx';
 import DepthChart from './components/DepthChart.tsx';
 import LoadingScreen from './components/LoadingScreen.tsx';
 import SettingsView from './components/SettingsView.tsx';
+import FilmRoom from './components/FilmRoom.tsx';
 
 const ROSTER_CAP = 53;
 const SAVE_SLOTS = ['slot_1', 'slot_2', 'slot_3'];
@@ -395,6 +396,8 @@ const App: React.FC = () => {
             onHire={handleHireStaff} 
             onUpdateStyle={handleUpdateStaffStyle}
           />
+        ) : activeTab === 'film_room' ? (
+          <FilmRoom />
         ) : activeTab === 'settings' ? (
           <SettingsView 
             gameState={gameState} 

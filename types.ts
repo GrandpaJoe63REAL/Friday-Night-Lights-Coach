@@ -134,6 +134,11 @@ export interface CareerStats {
   reputation: number;
 }
 
+export interface SearchSource {
+  title: string;
+  uri: string;
+}
+
 export interface GameState {
   year: number;
   week: number;

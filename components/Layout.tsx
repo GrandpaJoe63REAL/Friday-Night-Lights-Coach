@@ -19,6 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children, activeTab, onTabChange, gameY
     { id: 'stats', label: 'Stats', icon: '📈' },
     { id: 'recruiting', label: 'Recruitment Hub', icon: '🏃' },
     { id: 'staff', label: 'Staff', icon: '📋' },
+    { id: 'film_room', label: 'Film Room', icon: '🎬' },
     { id: 'schedule', label: 'Schedule', icon: '📅' },
     { id: 'settings', label: 'Save & Career', icon: '💾' },
   ];

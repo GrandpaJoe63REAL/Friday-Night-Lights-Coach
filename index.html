@@ -7,6 +7,8 @@
     <title>Friday Night Lights Coach</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <!-- Babel standalone to allow .tsx files to run in the browser without a build step -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -43,6 +45,17 @@
         .animate-in {
             animation: fade-in 0.5s ease-out forwards;
         }
+        /* Loading indicator for the transpilation phase */
+        #loader {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #0f172a;
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
     </style>
     <script type="importmap">
 {
@@ -50,6 +63,7 @@
     "react": "https://esm.sh/react@19",
     "react-dom": "https://esm.sh/react-dom@19",
     "react-dom/client": "https://esm.sh/react-dom@19/client",
+    "@google/genai": "https://esm.sh/@google/genai",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/"
   }
@@ -57,7 +71,24 @@
 </script>
 </head>
 <body>
+    <div id="loader">
+        <div class="flex flex-col items-center gap-4">
+            <div class="text-6xl animate-bounce">🏈</div>
+            <div class="text-xs font-black uppercase tracking-[0.3em] text-blue-500 animate-pulse">Initializing Playbook...</div>
+        </div>
+    </div>
     <div id="root"></div>
-    <script type="module" src="./index.tsx"></script>
+    <!-- Load the main entry point as a Babel script -->
+    <script type="text/babel" data-presets="react,typescript" data-type="module" src="./index.tsx"></script>
+    <script>
+        // Remove loader once React starts
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                if (loader) loader.style.opacity = '0';
+                setTimeout(() => loader && loader.remove(), 500);
+            }, 1500);
+        });
+    </script>
 </body>
 </html>
